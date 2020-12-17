@@ -1,8 +1,9 @@
 
 import "./TextField.css"
-function TextField(){
+function TextField(props){
     return(     //JSX expression
-        <input></input>
+        <input style={{backgrogroundColor : props.bgColor}}>
+        </input>
     )
 }
 
