@@ -3,6 +3,18 @@
         {
             "name":"Ganesha",
             "age":5000
-        }
+        },
+        {
+            "name":"Shiva",
+            "age":10000
+        },
+        {
+            "name":"Vishnu",
+            "age":10000
+        },
+        {
+            "name":"Brahma",
+            "age":10000
+        }  
     ]
 }
