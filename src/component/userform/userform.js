@@ -86,6 +86,11 @@ export class Userform extends Component {//ECMA6 class
 
 
     delete = (user, index) => {
+       const dec =  window.confirm("Are you sre to delete")
+       console.log('decision '+dec);
+       if(!dec) {
+           return;
+       }
         ApiService.delete(user.id, (response) => {
             console.log('res '+response)
             this.state.users.splice(index,1)
@@ -109,14 +114,29 @@ export class Userform extends Component {//ECMA6 class
         });
     }
 
+    sortFirstName = () => {
+        this.state.users.sort((obj1, obj2) => {
+            if(obj1.fname > obj2.fname){
+                return 1;
+            } else {
+                return -1;
+            }
+
+            // return (obj1.fname > obj2.fname) ? 1 : ( obj1.fname < obj2.fname) ? -1 : 0;
+        })
+        this.setState({
+            users: this.state.users
+        });
+    }
+
     render() {
         return (
             <form>
                 <label>First Name:
-                   <input value={this.state.formdata.fname} name='fname' onChange={this.handleKey}></input>
+                   <input value={this.state.formdata.fname} name='fname' onChange={this.handleChange}></input>
                 </label>
                 <label>Last Name:
-                   <input value={this.state.formdata.lastname} name='lastname' onChange={this.handleKeylast}></input>
+                   <input value={this.state.formdata.lastname} name='lastname' onChange={this.handleChange}></input>
                 </label>
                 <select name='carBrand' onChange={this.handleChange} value={this.state.formdata.carBrand}>
                     <option value='mercedes'>Mercedes</option>
@@ -139,7 +159,7 @@ export class Userform extends Component {//ECMA6 class
                 <button type='button' onClick={this.save}>Save</button>
                 <table>
                     <thead>
-                        <th>First Name <input onChange={this.handleKey}></input></th>
+                        <th onClick={this.sortFirstName}>First Name <input onChange={this.handleKey}></input></th>
                         <th>Last Name <input onChange={this.handleKeylast}></input></th>
                         <th>Car <input onChange={this.handleKeycar}></input></th>
                         <th>Gender <input onChange={this.handleKeygender}></input></th>

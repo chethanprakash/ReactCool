@@ -1,9 +1,6 @@
 // import logo from './logo.svg';
 // import './App.css';
-import TextField from './component/TextField';
-import MyButton from './component/MyButton';
-import { FormSelect } from './component/userform/userformArr';
-import { SkillForm } from './component/userform/skillform';
+
 import { Userform } from './component/userform/userform';
 
 function App() { //component

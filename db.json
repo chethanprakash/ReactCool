@@ -16,26 +16,29 @@
       "id": 2
     },
     {
-      "fname": "Ramesh2",
       "carBrand": "audi",
       "gender": "male",
-      "lastname": "Suresh2",
-      "skills": "React",
       "id": 3
     },
     {
-      "fname": "John",
+      "fname": "Ramesh1",
       "carBrand": "audi",
       "gender": "male",
-      "lastname": "Cena",
       "id": 4
     },
     {
-      "fname": "asdf",
+      "fname": "Suresh",
       "carBrand": "audi",
-      "gender": "female",
+      "gender": "male",
       "lastname": "asdf",
       "id": 5
+    },
+    {
+      "fname": "Mahesh",
+      "carBrand": "audi",
+      "gender": "male",
+      "lastname": "asdf",
+      "id": 6
     }
   ]
 }
