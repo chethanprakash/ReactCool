@@ -2,13 +2,15 @@
 // import './App.css';
 import TextField from './component/TextField';
 import MyButton from './component/MyButton';
-import { UserForm } from './component/userform/userform';
 import { FormSelect } from './component/userform/userformArr';
+import { SkillForm } from './component/userform/skillform';
+import { Userform } from './component/userform/userform';
 
 function App() { //component
   return (      //JSX Expression
-    // <UserForm></UserForm>
-    <FormSelect></FormSelect>
+    <Userform></Userform>
+    // <FormSelect></FormSelect>
+    // <SkillForm></SkillForm>
     // <div className="App">
     //   <header className="App-header">
     //     <TextField bgColor='yellow'></TextField>

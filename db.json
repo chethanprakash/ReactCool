@@ -1,20 +1,41 @@
 {
-    "users":[
-        {
-            "name":"Ganesha",
-            "age":5000
-        },
-        {
-            "name":"Shiva",
-            "age":10000
-        },
-        {
-            "name":"Vishnu",
-            "age":10000
-        },
-        {
-            "name":"Brahma",
-            "age":10000
-        }  
-    ]
+  "users": [
+    {
+      "fname": "Ramesh",
+      "carBrand": "audi",
+      "gender": "male",
+      "lastname": "Suresh",
+      "id": 1
+    },
+    {
+      "fname": "Ramesh1",
+      "carBrand": "audi",
+      "gender": "male",
+      "lastname": "Suresh1",
+      "skills": "javascript",
+      "id": 2
+    },
+    {
+      "fname": "Ramesh2",
+      "carBrand": "audi",
+      "gender": "male",
+      "lastname": "Suresh2",
+      "skills": "React",
+      "id": 3
+    },
+    {
+      "fname": "John",
+      "carBrand": "audi",
+      "gender": "male",
+      "lastname": "Cena",
+      "id": 4
+    },
+    {
+      "fname": "asdf",
+      "carBrand": "audi",
+      "gender": "female",
+      "lastname": "asdf",
+      "id": 5
+    }
+  ]
 }
