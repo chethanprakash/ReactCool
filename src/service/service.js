@@ -1,39 +1,34 @@
-import jquery from "jquery"
+import jquery from "jquery";
+
 export class ApiService {
-    static post(payload, callback){
-        console.log('SAVE')
-        jquery.post('http://localhost:4000/users',payload, callback)
+    static BASE_URL = 'http://localhost:4000/users/';
+    static SKILLS_URL = 'http://localhost:4000/skills/'
+    static updateUser(user, callback, errorCallback) {
+        jquery.ajax(ApiService.BASE_URL + user.id, {
+            type: 'put',
+            data: user,
+            success: callback,
+            error: errorCallback
+        });
+    }
+    static getAllUsers(successCallback) {
+        jquery.get(ApiService.BASE_URL, successCallback);
+    }
+    static getUsers(firstName, successCallback) {
+        jquery.get(ApiService.BASE_URL + '?fname=' + firstName, successCallback);
+    }
+    static post(payload, callback) {
+        jquery.post(ApiService.BASE_URL, payload, callback);
+    }
+    static deleteUser(id, callback, errorCallback) {
+        jquery.ajax(ApiService.BASE_URL + id, {
+            type: 'delete',
+            success: callback,
+            error: errorCallback
+        });
     }
 
-    static get(successCallBack){
-         jquery.get('http://localhost:4000/users',successCallBack)
-    }
-
-    static getkey(keyen,successCallBack){
-        if(keyen.length==0){
-            this.get()
-        }else {
-         jquery.get('http://localhost:4000/users?fname='+keyen,successCallBack)
-        }
-   }
-
-   static getkeylast(keyen,successCallBack){
-    jquery.get('http://localhost:4000/users?lastname='+keyen,successCallBack)
-}
-
-static getkeycar(keyen,successCallBack){
-    jquery.get('http://localhost:4000/users?carBrand='+keyen,successCallBack)
-}
-
-static getkeygender(keyen,successCallBack){
-    jquery.get('http://localhost:4000/users?gender='+keyen,successCallBack)
-}
-
-    static delete(id,callback,e){
-       return jquery.ajax('http://localhost:4000/users/'+id,
-       {
-           type : 'delete',
-           success : callback
-       });
+    static getAllSkills(successCallback) {
+        jquery.get(ApiService.SKILLS_URL, successCallback);
     }
 }

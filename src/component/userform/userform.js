@@ -1,22 +1,26 @@
-import { event } from "jquery";
 import { Component, useState } from "react";
 import { ApiService } from "../../service/service";
-import './userformcss.css'
+import { Counter, Counter2 } from "../counter/counter";
+import './userformcss.css';
 
 // function, arrow function
 export class Userform extends Component {//ECMA6 class
-    skills = ["java", 'javascript', 'React'];
+    skills = [];
 
     constructor() {
         super();
         this.state = {
-            users: [], formdata: {
+            users: [],
+            editRow: -1,
+            formdata: {
                 fname: 'Ramesh1',
                 carBrand: 'audi',
                 isChecked: {},
                 gender: 'male'
             }
         }
+
+        
     }
     createSelectItems = () => {
         let items = [];
@@ -38,95 +42,37 @@ export class Userform extends Component {//ECMA6 class
             console.log(response);
             this.setState({
                 users: [...this.state.users, response]
-            })
+            });
         }));;
     }
-
-    handleKey = (event) => {
-        console.log('key '+event.target.value)
-        if(!event.target.value.trim()){
-            ApiService.get((response) => {
-                console.log('users '+response)
-                this.setState({
-                    users: response
-                })
-            });
-        } else {
-        this.getAllUsers()
-    }
-    }
-
-    handleKeylast = (event) => {
-        console.log('key '+event.target.value)
-        ApiService.getkeylast(event.target.value, (response) => {
-            console.log(response)
-            this.setState({
-                users: response
-            })
-        })
-    }
-    handleKeycar = (event) => {
-        console.log('key '+event.target.value)
-        ApiService.getkeycar(event.target.value, (response) => {
-            console.log(response)
-            this.setState({
-                users: response
-            })
-        })
-    }
-    handleKeygender = (event) => {
-        console.log('key '+event.target.value)
-        ApiService.getkeygender(event.target.value, (response) => {
-            console.log(response)
-            this.setState({
-                users: response
-            })
-        })
-    }
-
-
-    delete = (user, index) => {
-       const dec =  window.confirm("Are you sre to delete")
-       console.log('decision '+dec);
-       if(!dec) {
-           return;
-       }
-        ApiService.delete(user.id, (response) => {
-            console.log('res '+response)
-            this.state.users.splice(index,1)
-            this.setState({
-                users : this.state.users
-            })    
-        })
-    }
-
-    componentWillMount(){
-        console.log('mounting')
+    componentDidMount() {
         this.getAllUsers();
         
     }
-    getAllUsers() {
-        ApiService.get((response) => {
-            console.log('users ' + response);
-            this.setState({
-                users: response
-            });
-        });
+
+    componentWillMount(){
+     this.getAllSkills();
     }
 
-    sortFirstName = () => {
-        this.state.users.sort((obj1, obj2) => {
-            if(obj1.fname > obj2.fname){
-                return 1;
-            } else {
-                return -1;
-            }
+    filter = (event) => {
+        if (!event.target.value.trim()) {
+            this.getAllUsers();
+        } else {
+            ApiService.getUsers(event.target.value, response => this.setState({
+                users: response
+            }));
+        }
+    }
+    getAllUsers() {
+        ApiService.getAllUsers(response => this.setState({
+            users: response
+        }));
+    }
 
-            // return (obj1.fname > obj2.fname) ? 1 : ( obj1.fname < obj2.fname) ? -1 : 0;
+    getAllSkills(){
+         ApiService.getAllSkills(response => {
+           this.skills= response;
         })
-        this.setState({
-            users: this.state.users
-        });
     }
 
     render() {
@@ -157,28 +103,82 @@ export class Userform extends Component {//ECMA6 class
                     {this.skills.map((skill, index) => <option key={index} value={skill}>{skill}</option>)}
                 </select>
                 <button type='button' onClick={this.save}>Save</button>
+                <Counter count={this.state.users.length}></Counter>
+                <Counter2 count={this.state.users.length}></Counter2>
                 <table>
                     <thead>
-                        <th onClick={this.sortFirstName}>First Name <input onChange={this.handleKey}></input></th>
-                        <th>Last Name <input onChange={this.handleKeylast}></input></th>
-                        <th>Car <input onChange={this.handleKeycar}></input></th>
-                        <th>Gender <input onChange={this.handleKeygender}></input></th>
-                        <th>Action</th>
+                        <th onClick={this.sortFirstName}>First Name <input onChange={this.filter}></input></th>
+                        <th>Last Name</th>
+                        <th>Car</th>
+                        <th>Gender</th>
                     </thead>
                     <tbody>
-                        
-                            {this.state.users.map((user, index) => <tr key={index} >
-                                <td>{user.fname}</td>
-                                <td>{user.lastname}</td>
-                                <td>{user.carBrand}</td>
-                                <td>{user.gender}</td>
-                            <button type="button" onClick={this.delete.bind(this,user,index)}>Delete</button></tr>)}
-                       
+                        {this.state.users.map((user, index) => (this.state.editRow !== index && <tr key={index} >
+                            <td> {user.fname}</td>
+                            <td>{user.lastname}</td>
+                            <td>{user.carBrand}</td>
+                            <td>{user.gender}</td>
+                            <td><button type='button' onClick={this.deleteUser.bind(this, user, index)}>Delete</button></td>
+                            <td><button type='button' onClick={this.activateUpdate.bind(this, index)}>Update</button></td>
+                        </tr>) || (
+                                this.state.editRow === index && <tr key={index} >
+                                    <td><input type='text' value={user.fname} name='fname' onBlur={this.updateUser.bind(this, user, index)} onChange={this.updateUserLocal.bind(this, index)} ></input></td>
+                                    <td><input type='text' value={user.lastname} name='lastname' onBlur={this.updateUser.bind(this, user, index)} onChange={this.updateUserLocal.bind(this, index)} ></input></td>
+
+                                    <td>{user.carBrand}</td>
+                                    <td>{user.gender}</td>
+                                    <td><button type='button' onClick={this.deleteUser.bind(this, user, index)}>Delete</button></td>
+                                    <td><button type='button' onClick={this.activateUpdate.bind(this, index)}>Update</button></td>
+                                </tr>))}
                     </tbody>
-                    {/* {this.state.users.map((user, index) => <li key={index} >{user.fname}
-                    <button type="button" onClick={this.delete.bind(this,user,index)}>Delete</button></li>)} */}
                 </table>
             </form>
         )
     }
+    updateUserLocal = (index, event) => {
+        this.state.users[index][event.target.name]= event.target.value;
+        this.setState({
+            users: [...this.state.users]
+        })
+    }
+    updateUser = (user) => {
+        ApiService.updateUser(user);
+    }
+    activateUpdate = (selectedRow) => {
+        this.setState({
+            editRow: selectedRow
+        })
+    }
+    sortFirstName = () => {
+        this.state.users.sort((user1, user2) => {
+            return (user1.fname < user2.fname) ? -1 : (user1.fname > user2.fname) ? 1 : 0
+        });
+        this.setState({
+            users: this.state.users
+        })
+    }
+    deleteUser = (user, index) => {
+        const decision = window.confirm('Are you sure?');
+        if (!decision)
+            return;
+        ApiService.deleteUser(user.id, (response) => {
+            console.log(response);
+            this.state.users.splice(index, 1);
+            this.setState({
+                users: this.state.users
+            });
+        },
+            (response) => {
+                alert('Delete failed...Try again');
+            });
+    };
+    //without arrow function
+    // var formObject = this;
+    // ApiService.deleteUser(user.id, function(response) {
+    //     console.log(response);
+    //     formObject.state.users.splice(index, 1);
+    //     formObject.setState({
+    //         users:formObject.state.users
+    //     });
+    // });
 }
